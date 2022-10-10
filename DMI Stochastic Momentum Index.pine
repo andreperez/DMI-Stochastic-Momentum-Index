@@ -98,10 +98,10 @@ var string typeDISmoothSlow = input.string(defval=SMA, title='Type of Smooth',
   options=[AARMA,ALSMA,AHMA,ADEMA,ALMA,AUTOL,COVWEMA,COVWMA,CMA,CORMA,DEMA,DONCHIAN,EFRAMA,EDSMA,EVWMA,EPMA,EDMA,EHMA,EMA,ETMA,FIBOWMA,FISHLSMA,FAMA,FRAMA,GMA,HKAMA,HMA,JURIK,KAMA,LC_LSMA,LEOMA,LSMA,LINWMA,MEDIAN,MAMA,MCMA,XEMA,REMA,REGMA,RMA,REPMA,RVWAP,RSIMA,SMA,SW_MA,SRWMA,SMMA,SWMA,TT3,TREMA,TRSMA,TEMA,THMA,VIDYA,VAMA,VWAP,WMA,WWMA,ZEMA,ZSMA],
   inline='11', group=DMI_HISTO)
   
-var col_grow_above_slow = input(color.new(#0000FF, 30), "Above Grow", inline="15", group=DMI_HISTO)
-var col_fall_above_slow = input(color.new(#2962ff, 50), "Fall", inline="15", group=DMI_HISTO)
-var col_grow_below_slow = input(color.new(#c2185b, 60), "Below Grow", inline="16", group=DMI_HISTO)
-var col_fall_below_slow = input(color.new(#670438, 60), "Fall", inline="16", group=DMI_HISTO)
+var col_grow_above_slow = input(color.new(#0139ff, 30), "Above Grow", inline="15", group=DMI_HISTO)
+var col_fall_above_slow = input(color.new(#3279f5, 30), "Fall", inline="15", group=DMI_HISTO)
+var col_grow_below_slow = input(color.new(#c2175b, 30), "Below Grow", inline="16", group=DMI_HISTO)
+var col_fall_below_slow = input(color.new(#f06291, 30), "Fall", inline="16", group=DMI_HISTO)
 
 // -->
 var string GRP_SMI = 'Stochastic Momentum Index'
@@ -118,7 +118,7 @@ var string typeSmoothStoch = input.string(defval=SMA, title='Type of Moving Aver
 // -->
 var string DMI_STOCH = 'DMI for Stochastic Momentum Index'
 var lenDI = input.int(10, minval=1, title="DI Length", group=DMI_STOCH, inline='40')
-var DIsmooth = input.bool(true, title='Smooth DI?', group=DMI_STOCH, inline='40', tooltip='These parameters only apply when Source equals DMI.')
+var DIsmooth = input.bool(false, title='Smooth DI?', group=DMI_STOCH, inline='40', tooltip='These parameters only apply when Source equals DMI.')
 
 var lenDIsmooth = input.int(2, minval=1, title="DI Smooth", group=DMI_STOCH, inline='41')
 var string typeDISmooth = input.string(defval=SMA, title='Type of Smooth',
@@ -133,15 +133,15 @@ var col_fall_below = input.color(color.new(#4a148c, 0), "Fall", inline="43", gro
 var string themeStoch_1 = input.string(defval='User', title='Theme for Stoch Oscilator',
   options=['User', 'Gradient', 'Spectrum Blue-Green-Red', 'Monokai'], inline='60', group='Theme')
     
-var color colorUpStoch_1 = input.color(color.new(#0139ff, 0), title='Bull', group='Theme', inline='61')
-var color colorDownStoch_1 = input.color(color.new(#e91e63, 0), title='Bear', group='Theme', inline='61')
+var color colorUpStoch_1 = input.color(color.new(#a5e12d, 0), title='Bull', group='Theme', inline='61')
+var color colorDownStoch_1 = input.color(color.new(#ae81ff, 0), title='Bear', group='Theme', inline='61')
 var int opacityStoch_1 = input.int(0, minval=0, maxval=100, inline='61', title='Opacity', group='Theme')
 
 var string themeStoch_2 = input.string(defval='User', title='Theme for Stoch Signal',
   options=['User', 'Gradient', 'Spectrum Blue-Green-Red', 'Monokai'], inline='62', group='Theme')
     
-var color colorUpStoch_2 = input.color(color.new(#0139ff, 0), title='Bull', group='Theme', inline='63')
-var color colorDownStoch_2 = input.color(color.new(#e91e63, 0), title='Bear', group='Theme', inline='63')
+var color colorUpStoch_2 = input.color(color.new(#a5e12d, 0), title='Bull', group='Theme', inline='63')
+var color colorDownStoch_2 = input.color(color.new(#ae81ff, 0), title='Bear', group='Theme', inline='63')
 var int opacityStoch_2 = input.int(0, minval=0, maxval=100, inline='63', title='Opacity', group='Theme')
 
 var int opacityStoch_3 = input.int(100, minval=0, maxval=100, inline='63', title='Opacity for fill', group='Theme')
@@ -160,7 +160,10 @@ var bottomAlertCross = input.int(-50, title='Fill when SMI bellow', inline='2', 
 var color colorOverBought = input.color(color.new(COLOR_DOWN, 85), title='Above', group=CROSS, inline='3')
 var color colorOverSold = input.color(color.new(#0005ee, 75), title='Bellow', group=CROSS, inline='3')
 
-var string BAR_COLORS = 'Bar colors'
+var showBarColors2 = input.bool(true, title='Colorize bars on alerts?', group=CROSS, inline='4')
+var color colorBarSignalDMI = input.color(color.new(color.yellow, 0), title='', group=CROSS, inline='4')
+
+var string BAR_COLORS = 'Bar colors (others alerts)'
 
 var showBarColors = input.bool(true, title='Colorize bars according to DMI Oscillator?', group=BAR_COLORS, inline='A')
 var color colorBarBullDMI = input.color(color.new(#00bcd4, 0), title='DMI above 0', group=BAR_COLORS, inline='A1')
@@ -170,10 +173,7 @@ var showBarColors3 = input.bool(true, title='Colorize bars according to DMI Osci
 var color colorBarSuperBullDMI = input.color(color.new(#2862ff, 0), title='DMI above 0 and SMI above MA', group=BAR_COLORS, inline='B')
 var color colorBarSuperBearDMI = input.color(color.new(#ff0000, 0), title='DMI below 0 and SMI bellow MA', group=BAR_COLORS, inline='B')
 
-var showBarColors2 = input.bool(false, title='Colorize bars on signals of SMI?', group=BAR_COLORS, inline='C')
-var color colorBarSignalDMI = input.color(color.new(color.yellow, 0), title='Signal', group=BAR_COLORS, inline='D')
-
-var showBarColors4 = input.bool(true, title='Colorize bars on signals of SMI when trend is same of DMI?', group=BAR_COLORS, inline='E')
+var showBarColors4 = input.bool(true, title='Colorize bars on SMI crossovers/crossunder of moving average, when the trend is the same as the DMI?', group=BAR_COLORS, inline='E')
 var color colorBarSignalDMItrendBull = input.color(color.new(color.white, 0), title='Inside bullish trend', group=BAR_COLORS, inline='F')
 var color colorBarSignalDMItrendBear = input.color(color.new(color.white, 0), title='Inside bearish trend', group=BAR_COLORS, inline='F')
 // ———————————————————————————————————————— }
@@ -193,7 +193,7 @@ fCalcDI(_lenDI, _DIsmooth, _typeDISmooth, _lenDIsmooth, _col_grow_above, _col_fa
     diff = plus - minus
     diff := _DIsmooth ? MaProxy.getMovingAverage(type=_typeDISmooth, src=diff, len=_lenDIsmooth, volumeWeighted=false) : diff
     
-    diffColor = (diff>=0 ? (diff[1] < diff ? _col_grow_above : _col_fall_above) : (diff[1] < diff ? _col_grow_below : _col_fall_below))
+    diffColor = (diff>=0 ? (diff[1] < diff ? _col_grow_above : _col_fall_above) : (diff[1] < diff ? _col_fall_below : _col_grow_below))
     
     [diff, diffColor]
 // ———————————————————————————————————————— }
@@ -286,8 +286,8 @@ lineAlertBottom = hline(-50, "Oversold", color=color.new(color.blue, 50), linest
 lineAlertBottomExtreme = hline(-70, "Extreme Oversold", color=color.new(color.blue, 0), linestyle=hline.style_solid, display=display.all)
 
 // DI
-plot(diffSlow, title="DI Histogram", style=plot.style_columns, color=diffColorSlow, linewidth=4)
-plot(diffSlow, title="DI Lines", style=plot.style_line, color=color.new(diffColorSlow, 0), linewidth=2, display=display.all)
+plot(diffSlow, title="DI Histogram", style=plot.style_histogram, color=diffColorSlow, linewidth=4)
+plot(diffSlow, title="DI Lines", style=plot.style_line, color=color.new(diffColorSlow, 0), linewidth=2, display=display.none)
 
 plot(diff, title="DI for Stoch", style=plot.style_area, color=diffColor, display=display.none)
 plot(diff, title="DI Lines for Stoch", style=plot.style_line, color=diffColor, linewidth=1, display=display.none)
@@ -307,6 +307,8 @@ fill(top, bottom, extremeBear ? colorOverSold : na, 'Fill background on bear sig
 fill(top, bottom, extremeBull ? colorOverBought : na, 'Fill background on bear signal', display=display.all)
 
 // Alerts
+bool crossOver =  ta.crossover(stoch, maStoch)
+bool crossUnder = ta.crossunder(stoch, maStoch)
 bool crossUp = (stoch <= bottomAlertLine or maStoch <= bottomAlertLine) and ta.crossover(stoch, maStoch)
 bool crossDown = (stoch >= topAlertLine or maStoch >= topAlertLine) and ta.crossunder(stoch, maStoch)
 
@@ -350,12 +352,12 @@ else
     colorBar
     
 colorBar := if showBarColors4
-    if crossUp 
+    if crossOver 
         if diffSlow >= 0
             colorBarSignalDMItrendBull
         else
             colorBar
-    else if crossDown
+    else if crossUnder
         if diffSlow <= 0
             colorBarSignalDMItrendBear
         else
